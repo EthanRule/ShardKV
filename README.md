@@ -1,8 +1,16 @@
 # ShardKV  
 Modern C++ 23 Sharded KV Store  
 
-// Build  
-```g++ -o build/main main.cpp```  
+### Build  
+```mkdir build```  
+```cd build```  
+```cmake .. -G Ninja```  
 
-// Execute  
-```./main```  
+### Execute  
+```./executable```
+
+### Dependancies
+OS: ```Linux (WSL)```  
+Ready: ```sudo apt update```  
+Compiler: ```sudo apt install clang```  
+Build Tool: ```sudo apt install cmake```
