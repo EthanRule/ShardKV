@@ -1,3 +1,5 @@
+# This script was AI generated via the base google search engine.
+
 #!/bin/bash
 
 BUILD_DIR="build/"
