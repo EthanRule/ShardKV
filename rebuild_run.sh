@@ -3,7 +3,7 @@
 #!/bin/bash
 
 BUILD_DIR="build/"
-EXECUTABLE_NAME="exe"
+EXECUTABLE_NAME="ShardKV"
 
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
