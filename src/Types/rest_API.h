@@ -1,3 +1,4 @@
+#pragma once
 enum class RestAPI {
     GET,
     SET,
