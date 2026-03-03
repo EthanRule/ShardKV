@@ -5,5 +5,6 @@
 
 struct Command {
     RestAPI restAPI;
-    std::vector<std::string> arguments;
+    std::string key;
+    std::string value;
 };

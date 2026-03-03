@@ -9,6 +9,7 @@ set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 set(SOURCE_FILES
     src/main.cpp
     src/CLI/command_line_interface.cpp
+    src/CLI/InputParser/input_parser.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

@@ -6,9 +6,14 @@ void CommandLineInterface::run() {
     std::string input;
     InputParser parser;
     while(true) {
-        std::cin >> input;
-        std::cout << "You inputted: " << input << '\n';
-        Command command = parser.parseInput(input);
+        std::getline(std::cin, input);
+        std::pair<Result, Command> command = parser.parseInput(input);
+        if (command.first.status == Status::ERROR) {
+            std::cout << command.first.error << '\n';
+            input.clear();
+            continue;
+        }
+
         input.clear();
     }
 }
