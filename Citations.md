@@ -1,0 +1,1 @@
+[Hashing Algorithm Design] https://severalnines.com/blog/hash-slot-vs-consistent-hashing-redis/ 
