@@ -4,5 +4,11 @@
         "command": "./rebuild_run.sh",
         "use_new_terminal": true,
         "allow_concurrent_runs": false
+    },
+    {
+        "label": "Test",
+        "command": "./rebuild_test.sh",
+        "use_new_terminal": true,
+        "allow_concurrent_runs": false
     }
 ]
