@@ -1,19 +1,24 @@
-#include "command_line_interface.h"
 #include "InputParser/input_parser.h"
+#include <stdexcept>
 #include <string>
+#include <iostream>
+#include "command_line_interface.h"
 
 void CommandLineInterface::run() {
     std::string input;
     InputParser parser;
     while(true) {
         std::getline(std::cin, input);
-        std::pair<Result, Command> command = parser.parseInput(input);
-        if (command.first.status == Status::ERROR) {
-            std::cout << command.first.error << '\n';
-            input.clear();
+        try {
+            Command command = parser.parseInput(input);
+            // do work
+
+
+        }
+        catch (std::runtime_error e) {
+            std::cerr << e.what() << '\n';
             continue;
         }
-
         input.clear();
     }
 }

@@ -4,47 +4,50 @@
 #include <utility>
 #include <algorithm>
 #include <cctype>
+#include <stdexcept>
 #include "input_parser.h"
 
-std::pair<Result, Command> InputParser::parseInput(std::string input) {
-    std::pair<Result, std::vector<std::string>> tokens = tokenize(input);
-    if (tokens.first.status == Status::ERROR) return {{tokens.first.status, tokens.first.error}, {}};
+Command InputParser::parseInput(std::string input) {
+    std::vector<std::string> tokens = tokenize(input);
 
     RestAPI rest;
-    std::transform(tokens.second[0].begin(), tokens.second[0].end(), tokens.second[0].begin(),[](unsigned char c){ return std::toupper(c); });
-    if (tokens.second[0] == "GET") {
+
+    // toupper first token
+    std::transform(tokens[0].begin(), tokens[0].end(), tokens[0].begin(),[](unsigned char c){ return std::toupper(c); });
+
+    if (tokens[0] == "GET") {
         rest = RestAPI::GET;
-    } else if (tokens.second[0] == "SET")
+    } else if (tokens[0] == "SET")
     {
         rest = RestAPI::SET;
     }
-    else if (tokens.second[0] == "DELETE") {
+    else if (tokens[0] == "DELETE") {
         rest = RestAPI::DELETE;
     } else {
-        return {{Status::ERROR, "Rest command unknown. Try GET, SET, or DELETE."}, {}};
+        throw std::runtime_error("Error: command: " + tokens[0] + " does not exist, try SET, GET, or DELETE.");
     }
 
     std::string key = "";
     std::string value = "";
     if (rest == RestAPI::GET || rest == RestAPI::SET) {
-        if (tokens.second.size() == 3) {
-            key = tokens.second[1];
-            value = tokens.second[2];
+        if (tokens.size() == 3) {
+            key = tokens[1];
+            value = tokens[2];
         } else {
-            return {{Status::ERROR, "Invalid argument count for. Expected 3"}, {}};
+            throw std::runtime_error("Error: expected 3 arguments, found: " + std::to_string(tokens.size()));
         }
     } else if (rest == RestAPI::DELETE) {
-        if (tokens.second.size() == 2) {
-            key = tokens.second[1];
+        if (tokens.size() == 2) {
+            key = tokens[1];
         } else {
-            return {{Status::ERROR, "Invalid argument count. Expected 2"}, {}};
+            throw std::runtime_error("Error: expected 2 arguments, found: " + std::to_string(tokens.size()));
         }
     }
 
-    return {{Status::SUCCESS}, {rest, key, value}};
+    return {rest, key, value};
 }
 
-std::pair<Result, std::vector<std::string>> InputParser::tokenize(std::string& input) {
+std::vector<std::string> InputParser::tokenize(std::string& input) {
     std::vector<std::string> tokens;
     std::stringstream ss(input);
     std::string token;
@@ -53,5 +56,5 @@ std::pair<Result, std::vector<std::string>> InputParser::tokenize(std::string& i
         tokens.push_back(token);
     }
 
-    return {{Status::SUCCESS}, tokens};
+    return tokens;
 }
