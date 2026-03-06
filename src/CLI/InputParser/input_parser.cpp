@@ -29,14 +29,14 @@ Command InputParser::parseInput(std::string input) {
 
     std::string key = "";
     std::string value = "";
-    if (rest == RestAPI::GET || rest == RestAPI::SET) {
+    if (rest == RestAPI::SET) {
         if (tokens.size() == 3) {
             key = tokens[1];
             value = tokens[2];
         } else {
             throw std::runtime_error("Error: expected 3 arguments, found: " + std::to_string(tokens.size()));
         }
-    } else if (rest == RestAPI::DELETE) {
+    } else if (rest == RestAPI::GET || rest == RestAPI::DELETE) {
         if (tokens.size() == 2) {
             key = tokens[1];
         } else {

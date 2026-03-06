@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include "../../src/CLI/InputParser/input_parser.h"
 
-// A simple test to make sure GTest is alive
 TEST(InputParserTest, BasicSET) {
     Command expected = {RestAPI::SET, "apples", "5"};
 
@@ -11,7 +10,7 @@ TEST(InputParserTest, BasicSET) {
 }
 
 TEST(InputParserTest, BasicGET) {
-    Command expected = {RestAPI::GET, "apples"};
+    Command expected = {RestAPI::GET, "cherries"};
 
     InputParser parser;
     Command command = parser.parseInput("GET cherries");
@@ -19,18 +18,9 @@ TEST(InputParserTest, BasicGET) {
 }
 
 TEST(InputParserTest, BasicDELETE) {
-    Command expected = {RestAPI::DELETE, "apples"};
+    Command expected = {RestAPI::DELETE, "oranges"};
 
     InputParser parser;
     Command command = parser.parseInput("DELETE oranges");
     EXPECT_EQ(command, expected);
 }
-
-TEST(InputParserTest, BasicSet) {
-    EXPECT_EQ(1, 1);
-}
-
-
-
-// You can eventually include your headers here:
-// #include "CLI/InputParser/input_parser.hpp"
