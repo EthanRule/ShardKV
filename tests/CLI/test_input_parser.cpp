@@ -3,15 +3,27 @@
 
 // A simple test to make sure GTest is alive
 TEST(InputParserTest, BasicSET) {
-    EXPECT_EQ(1, 1);
+    Command expected = {RestAPI::SET, "apples", "5"};
+
+    InputParser parser;
+    Command command = parser.parseInput("SET apples 5");
+    EXPECT_EQ(command, expected);
 }
 
 TEST(InputParserTest, BasicGET) {
-    EXPECT_EQ(1, 1);
+    Command expected = {RestAPI::GET, "apples"};
+
+    InputParser parser;
+    Command command = parser.parseInput("GET cherries");
+    EXPECT_EQ(command, expected);
 }
 
 TEST(InputParserTest, BasicDELETE) {
-    EXPECT_EQ(1, 1);
+    Command expected = {RestAPI::DELETE, "apples"};
+
+    InputParser parser;
+    Command command = parser.parseInput("DELETE oranges");
+    EXPECT_EQ(command, expected);
 }
 
 TEST(InputParserTest, BasicSet) {
