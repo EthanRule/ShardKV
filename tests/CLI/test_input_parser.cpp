@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../../src/CLI/InputParser/input_parser.h"
+#include "../../src/client/CLI/InputParser/input_parser.h"
 
 TEST(InputParserTest, BasicSET) {
     Command expected = {RestAPI::SET, "apples", "5"};

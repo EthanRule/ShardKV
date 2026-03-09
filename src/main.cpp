@@ -1,4 +1,4 @@
-#include "CLI/command_line_interface.h"
+#include "client/CLI/command_line_interface.h"
 using namespace std;
 
 int main(void) {

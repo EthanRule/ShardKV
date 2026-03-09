@@ -1,7 +1,7 @@
 #include <string>
 #include <array>
-#include "../Types/command.h"
-#include "../Types/node.h"
+#include "../../Types/command.h"
+#include "../../Types/node.h"
 
 typedef std::array<Node, 16384> table;
 class HashTable {

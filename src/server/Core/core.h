@@ -1,7 +1,7 @@
 #include "../HashTable/hash_table.h"
 #include <vector>
-#include "../Types/command.h"
-#include "../Types/observer.h"
+#include "../../Types/command.h"
+#include "../../Types/observer.h"
 
 class Core {
 private:

@@ -1,5 +1,5 @@
 #pragma once
-#include "../Types/observer.h"
+#include "../../Types/observer.h"
 
 class CommandLineInterface {
     public:

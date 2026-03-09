@@ -1,5 +1,5 @@
 #pragma once
-#include "../../Types/command.h"
+#include "../../../Types/command.h"
 #include <vector>
 
 class InputParser {
