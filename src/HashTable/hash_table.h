@@ -1,5 +1,6 @@
 #include <string>
 #include <array>
+#include "../Types/command.h"
 #include "../Types/node.h"
 
 typedef std::array<Node, 16384> table;
@@ -8,6 +9,9 @@ private:
     table table;
 
 public:
+    // need to be able to listen to incoming events to execute commands
+    void executeCommand(Command command);
+
     void set(std::string key, std::string value);
 
     std::string get(std::string key);

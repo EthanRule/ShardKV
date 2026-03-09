@@ -1,15 +1,14 @@
 #include "core.h"
 
-void Core::set(Command command) {
+void Core::executeCommand(Command command) {
+    undo.push_back(command);
+    // push a notification with a command to hashtable
+}
+
+void Core::undoCommand() {
 
 }
 
-std::string Core::get(Command command) {
-    std::string res = "";
-
-    return res;
-}
-
-void Core::deleteKey(Command command) {
+void Core::redoCommand() {
 
 }

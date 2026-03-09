@@ -12,7 +12,7 @@ void CommandLineInterface::run() {
         try {
             Command command = parser.parseInput(input);
             // do work
-
+            // notify Core to execute the command
 
         }
         catch (std::runtime_error e) {
