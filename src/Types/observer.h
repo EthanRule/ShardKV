@@ -31,10 +31,10 @@ public:
 
     // Should be able to publish event to subscribers, and receive events from publishers its subscribed to.
 
-    void update(const std::string &message_from_subject) override {
-        message_from_subject_ = message_from_subject;
-        PrintInfo();
-    }
+    // void update(const std::string &message_from_subject) override {
+    //     message_from_subject_ = message_from_subject;
+    //     PrintInfo();
+    // }
 
     //
     void addSubscriber(IObserver *observer) override {

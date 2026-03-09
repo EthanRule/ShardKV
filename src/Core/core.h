@@ -3,7 +3,7 @@
 #include "../Types/command.h"
 #include "../Types/observer.h"
 
-class Core : Subject {
+class Core {
 private:
     // this needs to be an observer that observes the commandlineinterface for new commands.
     // this needs to ovserve and recive notifications from hashtable, then bubble them up to cli
