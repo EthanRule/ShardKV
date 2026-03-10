@@ -3,7 +3,17 @@
 #include "hash_table.h"
 
 void HashTable::executeCommand(Command command) {
-    // switch on command type
+    switch (command.restAPI) {
+        case RestAPI::SET:
+            set(command.key, command.value);
+            break;
+        case RestAPI::GET:
+            get(command.key);
+            break;
+        case RestAPI::DELETE:
+            deleteItem(command.key);
+            break;
+    }
 }
 
 void HashTable::set(std::string key, std::string value) {
@@ -20,4 +30,10 @@ std::string HashTable::get(std::string key) {
 void HashTable::deleteItem(std::string key) {
 
     // if keyval deleted, notify core
+}
+
+ushort HashTable::hash(std::string key) {
+   uint16_t res; 
+   
+   return res;
 }

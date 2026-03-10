@@ -1,5 +1,6 @@
 #include <string>
 #include <array>
+#include <stdint.h>
 #include "../../Types/command.h"
 #include "../../Types/node.h"
 
@@ -20,5 +21,5 @@ public:
 
 private:
     // TODO: Ensure this is 16 bits unsigned.
-    ushort hash(std::string key);
+    uint16_t hash(std::string key);
 };
