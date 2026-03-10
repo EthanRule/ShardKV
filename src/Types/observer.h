@@ -3,11 +3,11 @@
 #include <string>
 
 class IObserver {
- public:
-  virtual void update(const std::string &message_from_subject) = 0;
-  virtual void addSubscriber(IObserver *observer) = 0;
-  virtual void removeSubscriber(IObserver *observer) = 0;
-  virtual void notify() = 0;
+public:
+    virtual void update(const std::string &message_from_subject) = 0;
+    virtual void addSubscriber(IObserver *observer) = 0;
+    virtual void removeSubscriber(IObserver *observer) = 0;
+    virtual void notify() = 0;
 };
 
 /**

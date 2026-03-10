@@ -5,9 +5,9 @@
 
 class Core {
 private:
-    // this needs to be an observer that observes the commandlineinterface for new commands.
-    // this needs to ovserve and recive notifications from hashtable, then bubble them up to cli
-    // this needs to propogate commands from cli down to hash table in the executeCommand() function
+    // this probably needs to handle an asynchronous pool of threads to accept requests from multiple clients.
+    // the observer patten needs to go back and fourth between this core class and hashmap. the core class might need to attach an ip address to each command too.
+    // this needs to ovserve and recive notifications from hashtable, then route them to cli
 
     HashTable hashTable;
     std::vector<Command> undo;
