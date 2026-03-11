@@ -1,3 +1,4 @@
+// Inspired by Googles swiss table.
 #include <string>
 #include <array>
 #include <stdint.h>
@@ -11,15 +12,16 @@ private:
 
 public:
     // need to be able to listen to incoming events to execute commands
-    void executeCommand(Command command);
+    void ExecuteCommand(Command command);
 
-    void set(std::string key, std::string value);
+    template<typename T>
+    void InsertItem(std::string key, T value);
 
-    std::string get(std::string key);
+    template<typename T>
+    T GetItem(std::string key);
 
-    void deleteItem(std::string key);
+    void DeleteItem(std::string key);
 
 private:
-    // TODO: Ensure this is 16 bits unsigned.
-    uint16_t hash(std::string key);
+    uint64_t Hash(std::string key);
 };

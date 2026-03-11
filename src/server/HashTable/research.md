@@ -111,6 +111,10 @@ When one input bit is complemented, each of the output bits change with a 50% pr
 
 https://en.wikipedia.org/wiki/Streaming_SIMD_Extensions (SIMD SSE instructions)
 
+#include "absl/container/node_hash_map.h"
+
+these are the fastest general maps and are also used as the default in the go programming language
+
 /* Hash Slot Algo:
  * Determines which partition of the table a key goes to.
  *
@@ -128,3 +132,5 @@ https://en.wikipedia.org/wiki/Streaming_SIMD_Extensions (SIMD SSE instructions)
  * - Chaining
  *
  */
+  
+// redis uses chaning hashing, but seems to have better latency on an update.

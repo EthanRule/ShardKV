@@ -1,42 +1,46 @@
 // key range of (or 0 – 16383)
 #include "hash_table.h"
 
-void HashTable::executeCommand(Command command) {
+void HashTable::ExecuteCommand(Command command) {
     switch (command.restAPI) {
         case RestAPI::SET:
-            set(command.key, command.value);
+            InsertItem(command.key, command.value);
             break;
         case RestAPI::GET:
-            get(command.key);
+            // auto res = GetItem(command.key);
             break;
         case RestAPI::DELETE:
-            deleteItem(command.key);
+            DeleteItem(command.key);
             break;
     }
 }
 
-void HashTable::set(std::string key, std::string value) {
+template<typename T>
+void HashTable::InsertItem(std::string key, T value) {
     // if a keyval got set, notify core
 }
 
-std::string HashTable::get(std::string key) {
+template<typename T>
+T HashTable::GetItem(std::string key) {
 
 
     // if get found key or didnt, notify core
     return "";
 }
 
-void HashTable::deleteItem(std::string key) {
+void HashTable::DeleteItem(std::string key) {
 
     // if keyval deleted, notify core
 }
 
-//
-ushort HashTable::hash(std::string key) {
-   uint16_t res;
+// TODO: hash function that distributes entrophy across entire bit space and causes avalanch effect. https://abseil.io/docs/cpp/guides/hash
+uint64_t HashTable::Hash(std::string key) {
+    uint64_t res;
+    // H1: 57 bits (normal hashvalue for lookup and insertions)
+    //
+    // H2: 7 bits (store metadata for this element. The H2 hash bits are stored seperatly within the metadata section of the table)
 
 
 
-
-   return res;
+    return res;
 }
