@@ -97,6 +97,20 @@ check if this is opensourced swiss table?
 
 power of 2 size to resize table on full load factor
 
+https://abseil.io/about/design/swisstables
+absl::flat_hash_map
+absl::flat_hash_set
+absl::node_hash_map
+absl::node_hash_set
+
+flat is faster, but node guarentees pointer/refrernce stability on rehash/resizes
+
+https://en.wikipedia.org/wiki/Avalanche_effect
+Avalanch effect: idealy prevents collision attacks, length extension attacks, and preimage attacks. 
+When one input bit is complemented, each of the output bits change with a 50% probability.
+
+https://en.wikipedia.org/wiki/Streaming_SIMD_Extensions (SIMD SSE instructions)
+
 /* Hash Slot Algo:
  * Determines which partition of the table a key goes to.
  *
