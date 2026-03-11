@@ -38,8 +38,11 @@ uint64_t HashTable::Hash(std::string key) {
     uint64_t res;
     // H1: 57 bits (normal hashvalue for lookup and insertions)
     //
-    // H2: 7 bits (store metadata for this element. The H2 hash bits are stored seperatly within the metadata section of the table)
-
+    // H2: 7 bits + 1 control bit (store metadata for this element. The H2 hash bits are stored seperatly within the metadata section of the table)
+    
+    // Empty 10000000
+    // Full 0 0x43
+    // Deleted 11111110
 
 
     return res;

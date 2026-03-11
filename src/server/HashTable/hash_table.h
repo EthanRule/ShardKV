@@ -3,12 +3,13 @@
 #include <array>
 #include <stdint.h>
 #include "../../Types/command.h"
-#include "../../Types/node.h"
+// #include "../../Types/node.h"
+#include "Types/group.h"
 
-typedef std::array<Node, 16384> table;
 class HashTable {
 private:
-    table table;
+    template <typename T>
+    static std::array<group<T>, 128> table; // TODO: figure out why this has to be static to work
 
 public:
     // need to be able to listen to incoming events to execute commands
@@ -24,4 +25,5 @@ public:
 
 private:
     uint64_t Hash(std::string key);
+
 };
