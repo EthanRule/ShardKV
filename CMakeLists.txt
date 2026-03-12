@@ -20,13 +20,13 @@ include(GoogleTest)
 
 add_executable(${PROJECT_NAME}
     src/main.cpp
-    src/CLI/command_line_interface.cpp
-    src/CLI/InputParser/input_parser.cpp
+    src/client/CLI/command_line_interface.cpp
+    src/client/CLI/InputParser/input_parser.cpp
 )
 
 add_executable(ShardKV_tests
-    src/CLI/command_line_interface.cpp
-    src/CLI/InputParser/input_parser.cpp
+    src/client/CLI/command_line_interface.cpp
+    src/client/CLI/InputParser/input_parser.cpp
     tests/CLI/test_input_parser.cpp
     tests/CLI/test_cli.cpp
 )
