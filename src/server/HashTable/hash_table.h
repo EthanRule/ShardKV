@@ -16,12 +16,12 @@ public:
     void ExecuteCommand(Command command);
 
     template<typename T>
-    void InsertItem(std::string key, T value);
+    void Insert(std::string key, T value);
 
     template<typename T>
-    T GetItem(std::string key);
+    T Find(std::string key);
 
-    void DeleteItem(std::string key);
+    void Delete(std::string key);
 
 private:
     uint64_t Hash(std::string key);
