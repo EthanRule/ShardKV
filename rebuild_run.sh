@@ -9,7 +9,7 @@ rm -rf $BUILD_DIR
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
-cmake .. -G Ninja
+cmake .. -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 echo "--- Cleaning build directory"
 cmake --build . --target clean
