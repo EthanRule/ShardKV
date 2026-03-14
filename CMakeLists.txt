@@ -5,6 +5,9 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
+# Process Abseil's CMake build system
+add_subdirectory(src/abseil-cpp)
+
 include(FetchContent)
 cmake_policy(SET CMP0135 NEW)
 
@@ -19,9 +22,10 @@ enable_testing()
 include(GoogleTest)
 
 add_executable(${PROJECT_NAME}
-    src/main.cpp
-    src/client/CLI/command_line_interface.cpp
-    src/client/CLI/InputParser/input_parser.cpp
+    src/main.cc
+    src/client/CLI/command_line_interface.cc
+    src/client/CLI/InputParser/input_parser.cc
+    src/server/HashTable/hash_table.cc
 )
 
 add_executable(ShardKV_tests
@@ -31,5 +35,5 @@ add_executable(ShardKV_tests
     tests/CLI/test_cli.cpp
 )
 
-target_link_libraries(ShardKV_tests PRIVATE gtest_main)
+target_link_libraries(ShardKV_tests PRIVATE gtest_main absl::hash)
 gtest_discover_tests(ShardKV_tests)

@@ -3,5 +3,5 @@
 
 
 TEST(HashTableTest, Hash) {
-    
+
 }
