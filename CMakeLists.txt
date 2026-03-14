@@ -29,11 +29,12 @@ add_executable(${PROJECT_NAME}
 )
 
 add_executable(ShardKV_tests
-    src/client/CLI/command_line_interface.cpp
-    src/client/CLI/InputParser/input_parser.cpp
-    tests/CLI/test_input_parser.cpp
-    tests/CLI/test_cli.cpp
+    src/client/CLI/command_line_interface.cc
+    src/client/CLI/InputParser/input_parser.cc
+    tests/CLI/test_input_parser.cc
+    tests/CLI/test_cli.cc
 )
 
+target_link_libraries(${PROJECT_NAME} PRIVATE absl::hash)
 target_link_libraries(ShardKV_tests PRIVATE gtest_main absl::hash)
 gtest_discover_tests(ShardKV_tests)

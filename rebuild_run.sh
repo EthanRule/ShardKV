@@ -5,6 +5,7 @@
 BUILD_DIR="build/"
 EXECUTABLE_NAME="ShardKV"
 
+rm -rf $BUILD_DIR
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
