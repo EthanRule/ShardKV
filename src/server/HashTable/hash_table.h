@@ -23,7 +23,6 @@ public:
 
     void Delete(std::string key);
 
-private:
-    uint64_t Hash(std::string key);
-
+    template <typename T>
+    std::array<group<T>, 128> GetTable();
 };

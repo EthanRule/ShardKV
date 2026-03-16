@@ -1,7 +1,21 @@
 #include "gtest/gtest.h"
 #include "../../src/server/HashTable/hash_table.h"
 
+// Note: functions like absl::Hash are not tested since they have their own tests in their library. Instead integration tests that combine
+// this function will be used.
 
-TEST(HashTableTest, Hash) {
+// Unit tests
+TEST(HashTableTest, InsertKey) {
+    HashTable table;
+
+    table.Insert("key", "value");
+
+    std::array<group<std::string>, 128> hashTable = table.GetTable<typename std::string>();
+    EXPECT_EQ(table.Find<std::string>("key"), "value");
+}
+
+TEST(HashTableTest, DeleteKey) {
+    HashTable table;
+
 
 }
