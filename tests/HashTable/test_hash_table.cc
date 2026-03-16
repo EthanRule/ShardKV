@@ -8,7 +8,7 @@
 TEST(HashTableTest, InsertKey) {
     HashTable table;
 
-    // table.Insert("key", "value");
+    table.Insert<std::string>("key", "value");
 
     // EXPECT_EQ(table.Find<std::string>("key"), "value");
 }

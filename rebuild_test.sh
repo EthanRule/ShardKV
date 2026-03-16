@@ -4,7 +4,7 @@ BUILD_DIR="build/"
 # Ensure this matches your test executable name in CMakeLists.txt
 TEST_EXECUTABLE="ShardKV_tests"
 
-# rm -rf $BUILD_DIR
+# rm -rf $BUILD_DIR # TODO: Determine why this still full rebuilds abseil libs.
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 

@@ -1,5 +1,5 @@
 # ShardKV  
-Modern C++ 23 Sharded KV Store  
+Modern C++ 23 Sharded KV Store for 64-bit systems.
 
 
 ### Dependancies

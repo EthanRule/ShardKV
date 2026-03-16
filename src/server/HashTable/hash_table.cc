@@ -1,5 +1,4 @@
 // key range of (or 0 – 16383)
-#include "absl/hash/hash.h"
 #include "hash_table.h"
 
 void HashTable::ExecuteCommand(Command command) {
@@ -16,10 +15,6 @@ void HashTable::ExecuteCommand(Command command) {
     }
 }
 
-template<typename T>
-void HashTable::Insert(std::string key, T value) {
-    // if a keyval got set, notify core
-}
 
 template<typename T>
 T HashTable::Find(std::string key) {

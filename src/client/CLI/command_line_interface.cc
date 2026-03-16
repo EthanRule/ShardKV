@@ -13,6 +13,21 @@ void CommandLineInterface::run() {
             Command command = parser.parseInput(input);
             // do work
             // notify Core to execute the command
+            switch (command.restAPI) {
+                case (RestAPI::SET):
+                    // Send event to table
+                    break;
+                    
+                case (RestAPI::GET):
+                
+                    break;
+                case (RestAPI::DELETE):
+                
+                    break;
+                
+                default:
+                    // Invalid comand
+            }
 
         }
         catch (std::runtime_error e) {

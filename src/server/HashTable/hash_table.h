@@ -9,6 +9,8 @@
 #include "../../Types/command.h"
 // #include "../../Types/node.h"
 #include "Types/group.h"
+#include "absl/hash/hash.h"
+#include <iostream>
 
 class HashTable {
 private:
@@ -20,7 +22,14 @@ public:
     void ExecuteCommand(Command command);
 
     template<typename T>
-    void Insert(std::string key, T value);
+    void Insert(std::string key, T value) {
+        // if a keyval got set, notify core
+        //
+        // 64 bits of result from absl:Hash. First 57 are the Hash Code and the last 7 are metadata.
+        uint64_t hashValue = absl::Hash<std::string>{}(key);
+
+        std::cout << "hashValue: " << hashValue << "\n";
+    }
 
     template<typename T>
     T Find(std::string key);
