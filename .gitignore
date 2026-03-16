@@ -44,3 +44,5 @@ build/
 # GTest IDE Intellisense
 compile_commands.json
 .cache
+
+src/abseil-cpp

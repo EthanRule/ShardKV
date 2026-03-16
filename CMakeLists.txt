@@ -33,6 +33,7 @@ add_executable(ShardKV_tests
     src/client/CLI/InputParser/input_parser.cc
     tests/CLI/test_input_parser.cc
     tests/CLI/test_cli.cc
+    tests/HashTable/test_hash_table.cc
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE absl::hash)

@@ -7,7 +7,8 @@ OS: ```Linux (WSL)```
 Ready: ```sudo apt update```  
 Compiler: ```sudo apt install clang```  
 Build Tool: ```sudo apt install cmake```  
-Enable Build Script: ```chmod +x rebuild_run.sh```
+Enable Build Script: ```chmod +x rebuild_run.sh && chmod +x rebuild_test```
+Abseil Hash Libs: ```cd src && git clone https://github.com/abseil/abseil-cpp.git```
 
 #### Rebuild & Run
 ```./rebuild_run.sh```
