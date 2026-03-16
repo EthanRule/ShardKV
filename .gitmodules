@@ -1,0 +1,3 @@
+[submodule "src/server/rust_web_server"]
+	path = src/server/rust_web_server
+	url = https://github.com/EthanRule/rust_web_server.git
