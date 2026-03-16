@@ -1,3 +1,6 @@
+#ifndef OBSERVER_H_
+#define OBSERVER_H_
+
 #include <iostream>
 #include <list>
 #include <string>
@@ -70,3 +73,5 @@ public:
         std::cout << "I'm about to do some thing important\n";
     }
 };
+
+#endif // OBSERVER_H_

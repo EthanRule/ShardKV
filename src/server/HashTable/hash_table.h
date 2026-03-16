@@ -1,4 +1,8 @@
 // Inspired by Googles swiss table.
+
+#ifndef HASH_TABLE_H_
+#define HASH_TABLE_H_
+
 #include <string>
 #include <array>
 #include <stdint.h>
@@ -26,3 +30,5 @@ public:
     template <typename T>
     std::array<group<T>, 128> GetTable();
 };
+
+#endif // HASH_TABLE_H_

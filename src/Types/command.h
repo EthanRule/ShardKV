@@ -1,4 +1,6 @@
-#pragma once
+#ifndef COMMAND_H_
+#define COMMAND_H_
+
 #include "rest_API.h"
 #include <string>
 
@@ -11,3 +13,5 @@ struct Command {
         return restAPI == other.restAPI && key == other.key && value == other.value;
     }
 };
+
+#endif // COMMAND_H_

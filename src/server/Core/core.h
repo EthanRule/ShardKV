@@ -1,3 +1,6 @@
+#ifndef CORE_H_
+#define CORE_H_
+
 #include "../HashTable/hash_table.h"
 #include <vector>
 #include "../../Types/command.h"
@@ -21,3 +24,5 @@ public:
 private:
 
 };
+
+#endif // CORE_H_
