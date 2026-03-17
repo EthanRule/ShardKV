@@ -4,7 +4,10 @@
 #include "../HashTable/hash_table.h"
 #include <vector>
 #include "../../Types/command.h"
-#include "../../Types/observer.h"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <arpa/inet.h>
 
 class Core {
 private:
@@ -18,6 +21,8 @@ private:
     std::vector<Command> redo;
 
 public:
+    // listener to web server
+    void run();
     void executeCommand(Command command);
     void undoCommand();
     void redoCommand();

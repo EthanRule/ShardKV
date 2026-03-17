@@ -26,6 +26,7 @@ add_executable(${PROJECT_NAME}
     src/client/CLI/command_line_interface.cc
     src/client/CLI/InputParser/input_parser.cc
     src/server/HashTable/hash_table.cc
+    src/server/Core/core.cc
 )
 
 add_executable(ShardKV_tests

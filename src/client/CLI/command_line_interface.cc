@@ -12,7 +12,7 @@ void CommandLineInterface::run() {
         try {
             Command command = parser.parseInput(input);
             // do work
-            // notify Core to execute the command
+            // notify web server to execute command, and also listen for results from web server
             switch (command.restAPI) {
                 case (RestAPI::SET):
                     // Send event to table
@@ -27,7 +27,8 @@ void CommandLineInterface::run() {
                 
                 default:
                     // Invalid comand
-            }
+                    break;
+            };
 
         }
         catch (std::runtime_error e) {
