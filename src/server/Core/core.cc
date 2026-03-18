@@ -16,7 +16,7 @@ void Core::run() {
     struct sockaddr_in6 servaddr, cli;
 
     // socket create and verification
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    sockfd = socket(AF_INET6, SOCK_STREAM, 0);
     if (sockfd == -1) {
         printf("socket creation failed...\n");
         exit(0);

@@ -19,8 +19,9 @@ Abseil Hash Libs: ```cd src && git clone https://github.com/abseil/abseil-cpp.gi
     {
         "context": "Workspace",
         "bindings": {
-            "ctrl-'": ["task::Spawn", { "task_name": "Rebuild" }],
-            "ctrl-t": ["task::Spawn", { "task_name": "Test" }]
+            "ctrl-'": ["task::Spawn", { "task_name": "rebuild_run" }],
+            "ctrl-t": ["task::Spawn", { "task_name": "test" }]
+            "ctrl-b": ["task::Spawn", { "task_name": "rebuild" }]
         }
     },
 ```

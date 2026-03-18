@@ -1,9 +1,15 @@
 cmake_minimum_required(VERSION 3.26)
 project(ShardKV LANGUAGES CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS_ON)
+
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE debug)
+endif()
 
 # Process Abseil's CMake build system
 add_subdirectory(src/abseil-cpp)
