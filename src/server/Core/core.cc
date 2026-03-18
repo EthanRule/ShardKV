@@ -12,7 +12,8 @@
 #define SA struct sockaddr
 
 void Core::run() {
-    int sockfd, connfd, len;
+    int sockfd, connfd;
+    socklen_t len;
     struct sockaddr_in6 servaddr, cli;
 
     // socket create and verification
@@ -45,7 +46,7 @@ void Core::run() {
     }
     len = sizeof(cli);
 
-    // connfd = accept(sockfd, (SA*)&cli, &len);
+    connfd = accept(sockfd, (SA*)&cli, &len);
     if (connfd < 0) {
         printf("server accept failed...\n");
         exit(0);
