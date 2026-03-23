@@ -40,9 +40,3 @@ void HashTable::Delete(std::string key) {
 
     // if keyval deleted, notify core
 }
-
-
-template <typename T>
-std::array<group<T>, 128> HashTable::GetTable() {
-    return table<T>;
-}

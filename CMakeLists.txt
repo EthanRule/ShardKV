@@ -46,3 +46,10 @@ add_executable(ShardKV_tests
 target_link_libraries(${PROJECT_NAME} PRIVATE absl::hash)
 target_link_libraries(ShardKV_tests PRIVATE gtest_main absl::hash)
 gtest_discover_tests(ShardKV_tests)
+
+# Standalone hash table dev target (no CLI/Core deps)
+add_executable(hashtable_dev
+    hash_table_main.cc
+    src/server/HashTable/hash_table.cc
+)
+target_link_libraries(hashtable_dev PRIVATE absl::hash)
