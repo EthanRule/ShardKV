@@ -40,3 +40,19 @@ void HashTable::Delete(std::string key) {
 
     // if keyval deleted, notify core
 }
+
+
+// which group to probe, should use last 57 bits.
+size_t HashTable::H1(uint64_t hash) {
+    return hash & (capacity - 1);
+}
+
+
+// 7 bit metadata for ctrl_t
+int8_t HashTable::H2(uint64_t hash) {
+    hash >>= 57;
+
+    return (int8_t)hash;
+}
+
+

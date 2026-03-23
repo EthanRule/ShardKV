@@ -8,7 +8,6 @@
 #include <stdint.h>
 #include "../../Types/command.h"
 // #include "../../Types/node.h"
-#include "Types/group.h"
 #include "absl/hash/hash.h"
 #include <iostream>
 
@@ -74,8 +73,10 @@ public:
         //
         // 64 bits of result from absl:Hash. First 57 are the Hash Code and the last 7 are metadata.
         uint64_t hashValue = absl::Hash<std::string>{}(key);
+        int8_t metadata = H2(hashValue);
 
         std::cout << "hashValue: " << hashValue << "\n";
+        std::cout << "7 bit metadata: " << metadata << "\n";
     }
 
     template<typename T>
@@ -84,6 +85,9 @@ public:
     void Delete(std::string key);
 
     // template <typename T>
+private:
+    size_t H1(uint64_t hash); // which group to probe
+    int8_t H2(uint64_t hash); // 7 bit metadata for ctrl_t
 };
 
 #endif // HASH_TABLE_H_
