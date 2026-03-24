@@ -51,15 +51,9 @@ private:
     static constexpr size_t kWidth = 16;
 
     size_t growth_left;
-
-    ctrl_t ctrl[capacity];
-
-    // NOTE: the sentinel is used for letting iterators over the ctrl know that it has ended.
-    ctrl_t sentinel;
-
-    // NOTE: the clones are used for ensuring group loads starting near the end of ctrl
-    // have the bytes to run a full 16 byte SIMD comparrison?
-    ctrl_t clones[kWidth - 1];
+    
+    // NOTE: 0-127 are control bytes, the + 1 is the sentinel indicating the end, and kWidth - 1 are clones too allow for simd 16 byte instructions on indices greater than 111.
+    ctrl_t ctrl[capacity + 1 + kWidth - 1];
 
     slot_type slots[capacity];
 
@@ -88,6 +82,10 @@ public:
 private:
     size_t H1(uint64_t hash); // which group to probe
     int8_t H2(uint64_t hash); // 7 bit metadata for ctrl_t
+    //
+    uint16_t Match(ctrl_t* start, ctrl_t byte);
+    uint16_t MatchEmpty(ctrl_t* start);
+
 };
 
 #endif // HASH_TABLE_H_

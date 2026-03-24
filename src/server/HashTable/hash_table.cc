@@ -55,4 +55,21 @@ int8_t HashTable::H2(uint64_t hash) {
     return (int8_t)hash;
 }
 
+// NOTE: Checks 16 control bytes to see if any match to "byte". This filters down to where the hash could be.
+uint16_t HashTable::Match(ctrl_t* start, ctrl_t byte) {
+    uint16_t res = 0;
+
+    for (int i = 0; i < 16; ++i) {
+        uint16_t mask = 0;
+
+        if (*start == byte) {
+            mask = (1U << i);
+        }
+
+        res |= mask;
+        start++;
+    }
+
+    return res;
+}
 
