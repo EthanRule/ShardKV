@@ -73,3 +73,21 @@ uint16_t HashTable::Match(ctrl_t* start, ctrl_t byte) {
     return res;
 }
 
+// NOTE: 
+// Returns mask that indicates whether an kEmpty or kSentinel exists.
+uint16_t HashTable::MatchEmpty(ctrl_t* start) {
+    uint16_t res = 0;
+
+    for (int32_t i = 0; i < 16; ++i) {
+        uint16_t mask= 0;
+        if (*start == kEmpty || *start == kSentinel) {
+            mask = (1U << i);
+        }
+
+        res |= mask;
+        start++;
+    }
+
+    return res;
+}
+

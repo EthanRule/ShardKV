@@ -1,4 +1,5 @@
 // Inspired by Googles swiss table.
+// REF: hashtable_control_bytes.h
 
 #ifndef HASH_TABLE_H_
 #define HASH_TABLE_H_
@@ -85,7 +86,6 @@ private:
     //
     uint16_t Match(ctrl_t* start, ctrl_t byte);
     uint16_t MatchEmpty(ctrl_t* start);
-
 };
 
 #endif // HASH_TABLE_H_
