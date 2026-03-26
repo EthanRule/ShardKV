@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 #include "../../src/server/HashTable/hash_table.h"
 
-// Note: functions like absl::Hash are not tested since they have their own tests in their library. Instead integration tests that combine
-// this function will be used.
+// NOTE: This file declares tests for standard hash functions such as Insert, Find,
+// and Delete.
 
 // Unit tests
 TEST(HashTableTest, InsertKey) {

@@ -12,19 +12,16 @@ Abseil Hash Libs: ```cd src && git clone https://github.com/abseil/abseil-cpp.gi
 
 #### Rebuild & Run
 ```./rebuild_run.sh```
+  
+#### Resources
+The resources listed here act as breadcrumb trail for better understanding the the code.   
 
-#### Shortcut (Zed, Cursor, VSCode)
-1. Locate your IDE keybind settings, then in your keymap.json add:
-```
-    {
-        "context": "Workspace",
-        "bindings": {
-            "ctrl-'": ["task::Spawn", { "task_name": "rebuild_run" }],
-            "ctrl-t": ["task::Spawn", { "task_name": "test" }]
-            "ctrl-b": ["task::Spawn", { "task_name": "rebuild" }]
-        }
-    },
-```
-2. Notice this project has a .zed folder with a tasks.json. If you are using zed this will work fine,  
-if you use cursor or vscode, create a tasks.json in a .cursor or .vscode directory respectively.  
-3. Select the terminal then hit your keybind (ctrl-') to rebuild and run. Test using (ctrl-t).
+- https://google.github.io/googletest/primer.html  
+- https://abseil.io/about/design/swisstables  
+-
+
+#### Inspirations
+
+- https://abseil.io/about/design/swisstables  
+- https://github.com/redis/redis  
+-
