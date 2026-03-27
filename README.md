@@ -18,6 +18,7 @@ The resources listed here act as breadcrumb trail for better understanding the t
 
 - https://google.github.io/googletest/primer.html  
 - https://abseil.io/about/design/swisstables  
+- https://en.wikipedia.org/wiki/Quadratic_probing
 -
 
 #### Inspirations

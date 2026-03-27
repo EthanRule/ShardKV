@@ -15,21 +15,22 @@ void HashTable::ExecuteCommand(Command command) {
     }
 }
 
-
+// Quadratic probing insert.
 void HashTable::Insert(std::string key, std::string value) {
-    // if a keyval got set, notify core
-    //
-    // 64 bits of result from absl:Hash. First 57 are the Hash Code and the last 7 are metadata.
-    uint64_t hashValue = absl::Hash<std::string>{}(key);
-    int8_t metadata = H2(hashValue);
+    uint8_t hashValue = absl::Hash<std::string>{}(key) & (capacity - 1);
+    int8_t metadata = H2(hashValue, sizeof(hashValue));
 
     std::cout << "hashValue: " << hashValue << "\n";
     std::cout << "7 bit metadata: " << metadata << "\n";
+    
+    // ctrl_t ctrl
+    // slot_type slots
+    // slots
+    
 }
 
 
-template<typename T>
-T HashTable::Find(std::string key) {
+std::string HashTable::Find(std::string key) {
 
     // iterator find(const K& key, size_t hash) const {
     //   size_t pos = H1(hash) % size_;
@@ -61,7 +62,7 @@ size_t HashTable::H1(uint64_t hash) {
 
 
 // 7 bit metadata for ctrl_t
-int8_t HashTable::H2(uint64_t hash) {
+int8_t HashTable::H2(uint64_t hash, size_t size) {
     hash >>= 57;
 
     return (int8_t)hash;

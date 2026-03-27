@@ -3,6 +3,6 @@
 
 int main() {
     HashTable table;
-    table.Insert<std::string>("hello", "world");
+    table.Insert("hello", "world");
     return 0;
 }

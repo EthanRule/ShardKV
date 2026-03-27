@@ -76,7 +76,7 @@ public:
     void Insert(std::string key, std::string value);
 
     // Given a key, finds value in the table.
-    Find(std::string key);
+    std::string Find(std::string key);
 
     // Deletes key value pair in the table.
     void Delete(std::string key);
