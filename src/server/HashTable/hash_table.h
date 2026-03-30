@@ -66,6 +66,10 @@ public:
     HashTable() {
 
         // Initialize the sentinel value at the end of the control byte array.
+        for (size_t i {}; i < capacity; ++i) {
+            ctrl[i] = kEmpty;
+        }
+
         ctrl[128] = kSentinel;
     }
 
