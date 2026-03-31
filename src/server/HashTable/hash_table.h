@@ -31,6 +31,7 @@
 #include "../../Types/command.h"
 #include "absl/hash/hash.h"
 #include <iostream>
+#include <bitset>
 
 // Type for control bytes.
 typedef int8_t ctrl_t;

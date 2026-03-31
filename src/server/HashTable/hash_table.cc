@@ -21,9 +21,6 @@ void HashTable::Insert(std::string key, std::string value) {
     size_t slot = H1(hashValue);
     int8_t ctrl_byte = H2(hashValue);
 
-    std::cout << "slot: " << slot << "\n";
-    std::cout << "ctrl_byte: " << ctrl_byte << "\n";
-
     // Search the 16 ctrl bytes starting at `slot` to find an empty, then 
     // probe subsaquent groups with triangularly increasing jumps: https://en.wikipedia.org/wiki/Triangular_number
     size_t jumps = 1;
@@ -49,7 +46,6 @@ void HashTable::Insert(std::string key, std::string value) {
     }
 }
 
-
 std::string HashTable::Find(std::string key) {
 
     // iterator find(const K& key, size_t hash) const {
@@ -74,23 +70,14 @@ void HashTable::Delete(std::string key) {
     // if keyval deleted, notify core
 }
 
-
 // which group to probe, should use last 57 bits.
 size_t HashTable::H1(uint64_t hash) {
     return hash & (capacity - 1);
 }
 
-
 // 7 bit metadata for ctrl_t
 int8_t HashTable::H2(uint64_t hash) {
-    std::cout << "H2 before shift: " << hash << std::endl;
     hash >>= 57;
-    std::cout << "H2 after shift: " << hash << std::endl;
-
-    int8_t res = (int8_t)hash;
-
-    
-    // std::cout << "res after cast: " << res << std::endl;
 
     return (int8_t)hash;
 }
