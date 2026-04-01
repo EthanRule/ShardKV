@@ -9,14 +9,15 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h> // read(), write(), close()
-#include <strings.h>
+#include <cstring>
+#include <arpa/inet.h>
 #define MAX 80
 #define PORT 8080
 #define SA struct sockaddr
 
 // This CLI will need to be a TCP stream that can write and read responses to webserver
 
-void CommandLineInterface::run() {
+int CommandLineInterface::run() {
     std::string input;
     InputParser parser;
     while(true) {
@@ -28,8 +29,8 @@ void CommandLineInterface::run() {
 
             // socket create and verification
             int status, valread, client_fd;
-            struct sockaddr_in serv_addr;
-            char* hello = "Hello from client";
+            struct sockaddr_in6 serv_addr;
+            const char* hello = "Hello from client";
             char buffer[1024] = { 0 };
             if ((client_fd = socket(AF_INET6, SOCK_STREAM, 0)) < 0) {
                 printf("\n Socket creation error \n");
@@ -40,12 +41,12 @@ void CommandLineInterface::run() {
             serv_addr.sin6_addr = in6addr_any;
             serv_addr.sin6_port = htons(PORT);
 
-            if (inet_pton(AF_INET6, "127.0.0.1", &serv_addr.sin_addr) <= 0) {
+            if (inet_pton(AF_INET6, "127.0.0.1", &serv_addr.sin6_addr) <= 0) {
                 printf("\nInvalid address / Address not supported");
                 return -1;
             }
 
-            if ((status = connect(client_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr))) {
+            if ((status = connect(client_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)))) {
                 printf("\n Connection Failed \n");
                 return -1;
             }

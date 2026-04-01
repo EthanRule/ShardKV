@@ -27,20 +27,23 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 include(GoogleTest)
 
-add_executable(${PROJECT_NAME}
-    src/main.cc
+set(COMMON_SOURCES
     src/client/CLI/command_line_interface.cc
     src/client/CLI/InputParser/input_parser.cc
     src/server/HashTable/hash_table.cc
     src/server/Core/core.cc
 )
 
+add_executable(${PROJECT_NAME}
+    src/main.cc
+    ${COMMON_SOURCES}
+)
+
 add_executable(ShardKV_tests
-    src/client/CLI/command_line_interface.cc
-    src/client/CLI/InputParser/input_parser.cc
+    tests/HashTable/test_hash_table.cc
     tests/CLI/test_input_parser.cc
     tests/CLI/test_cli.cc
-    tests/HashTable/test_hash_table.cc
+    ${COMMON_SOURCES}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE absl::hash)
