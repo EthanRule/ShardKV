@@ -54,6 +54,7 @@ private:
     // Width to extend ctrl byte array by 1 group. A group is 16 slots.
     static constexpr size_t kWidth = 16;
 
+    // How much space is left on the table.
     size_t growth_left;
     
     // NOTE: Control bytes: 0-127, Sentinel: 128, Clones: kWidth - 1.
@@ -72,6 +73,7 @@ public:
         }
 
         ctrl[128] = kSentinel;
+        growth_left = capacity - 1;
     }
 
     // Entry point to listen and execute commands.
@@ -85,6 +87,19 @@ public:
 
     // Deletes key value pair in the table.
     void Delete(std::string key);
+
+    // NOTE: Unit Test Helper Methods
+    constexpr size_t GetCapacity() const { return this->capacity; }
+    
+    // Returns a pointer to the start of the table.
+    const slot_type* GetHashTablePairs() const {
+        return this->slots;
+    }
+
+    // Returns the growth left / capcity excluding the sentinel.
+    const double GetLoadFactor() const {
+        return growth_left / (capacity - 1);
+    }
 
 private:
 
