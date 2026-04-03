@@ -64,9 +64,9 @@ TEST(HashTableTest, InsertTableCapacityKeys_AllUniqueKeysExist) {
     const slot_type* table_start = table.GetHashTablePairs();
 
     for (size_t i {}; i < table.GetCapacity(); ++i) {
-        //if (keys.find(table_
+        keys.erase(table_start[i].first);
     }
-    // std::cout << *table_start << std::endl;
 
+    EXPECT_EQ(keys.size(), 0);
 }
 
