@@ -31,7 +31,7 @@ TEST(HashTableTest, InsertMultipleKeys) {
     // EXPECT_EQ(table.Find<std::string>("key"), "value");
 }
 
-// Test inserting capacity (max slots in table) keys.
+// Test inserting capacity (max slots in table) keys fill the entire table.
 TEST(HashTableTest, InsertTableCapacityKeys_FullLoadFactor) {
     HashTable table;
     std::unordered_set<std::string> keys;
@@ -48,7 +48,7 @@ TEST(HashTableTest, InsertTableCapacityKeys_FullLoadFactor) {
 
 }
 
-
+// Test inserting capacity (max slots in table) keys are all found unique.
 TEST(HashTableTest, InsertTableCapacityKeys_AllUniqueKeysExist) {
     HashTable table;
     std::unordered_set<std::string> keys;
