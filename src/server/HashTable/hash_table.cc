@@ -1,5 +1,6 @@
 // key range of (or 0 – 16383)
 #include "hash_table.h"
+#include <immintrin.h> // https://clang.llvm.org/doxygen/immintrin_8h.html
 
 void HashTable::ExecuteCommand(Command command) {
     switch (command.restAPI) {
@@ -39,38 +40,81 @@ void HashTable::Insert(std::string key, std::string value) {
         }
 
         if (inserted) break;
-
+        
+        std::cout << "Collision! jumping and trying again." << "\n";
         jump_size = (jumps * (jumps + 1)) / 2;
         jumps++;
         slot += 16 * jump_size;
     }
 }
 
+// Finds the key in the table.
+// 
 std::string HashTable::Find(std::string key) {
+    uint64_t hash = absl::Hash<std::string>{}(key);
+    size_t start = H1(hash);
+    int8_t target_ctrl_byte = H2(hash);
 
-    // iterator find(const K& key, size_t hash) const {
-    //   size_t pos = H1(hash) % size_;
-    //   while (true) {
-    //     if (H2(hash) == ctrl_[pos] && key == slots[pos])
-    //       return iterator_at(pos);
-    //     if (ctrl_[pos] == kEmpty) return end();
-    //     pos = (pos + 1) % size_;
-    //   }
-    // }
+    std::cout << "group from H1: " << start << "\n";
+    std::cout << "target_ctrl_byte H2: " << target_ctrl_byte << "\n";
+    bool sentinel_empty_found = false;
 
-    // if get found key or didnt, notify core
+    while (sentinel_empty_found == false) {
+        // Check if group has a empty or sentinel bit.
+        ctrl_t* start_index = &ctrl[start];
+        uint16_t empty_sentinel_bitmask = MatchEmpty(start_index);
+        
+        // Find the leftmost sentinel / empty set bit (this is our signal to stop searching).
+        uint16_t index = __lzcnt16(empty_sentinel_bitmask);
+
+        if (index == 16) { // No sentinels or empties found.
+            index = -1;
+        } else {
+            sentinel_empty_found = true;
+        }
+
+        uint16_t mask = Match(start_index, target_ctrl_byte);
+    
+        // BMI1 x86-64 instruction
+        // Purpose: Counts zeros from up until the occurance of the first set bit.
+        uint16_t match_bit = __lzcnt16(targets_bitmask) - 16; 
+    
+        while (match_bit < 16) {
+            // Check slot at index. // check if it equals the same hash or key? I think key.
+            if (slot[match_bit].first == key) {
+                return slot[match_bit].second;
+            }
+
+            /*
+            * Brian Kernighan's Algorithm
+            * Purpose: Flip the right most bit of a number n. are we sure we want to even do this?
+            * Source: https://medium.com/@wizzywooz/brian-kernighans-algorithm-c65d796a7112
+            *                          bin        dec
+            *          n               00001000   8
+            *          n + 1           00000111   7
+            * // NOTE: n & (n - 1)     00000100   4
+            */
+
+            
+            
+            mask &= mask - 1;
+            
+            match_bit = __lzcnt16(mask) - 16;
+        }
+    
+
+    //}
+
+    
+
     return "";
 }
 
-// size_t H1(size_t hash) { return hash >> 7; }
-// ctrl_t H2(sizse_t hash) { return hash & 0x7F; }
 
 void HashTable::Delete(std::string key) {
-
-    // if keyval deleted, notify core
 }
 
-// which group to probe, should use last 57 bits.
+// Finds which group to probe, using last 57 bits.
 size_t HashTable::H1(uint64_t hash) {
     return hash & (capacity - 1);
 }
@@ -83,13 +127,13 @@ int8_t HashTable::H2(uint64_t hash) {
 }
 
 // NOTE: Checks 16 control bytes to see if any match to "byte". This filters down to where the hash could be.
-uint16_t HashTable::Match(ctrl_t* start, ctrl_t byte) {
+uint16_t HashTable::Match(size_t start, ctrl_t byte) {
     uint16_t res = 0;
 
     for (int i = 0; i < 16; ++i) {
         uint16_t mask = 0;
 
-        if (*start == byte) {
+        if (ctrl[start] == byte) {
             mask = (1U << i);
         }
 
