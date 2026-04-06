@@ -49,51 +49,67 @@ void HashTable::Insert(std::string key, std::string value) {
 }
 
 // Finds the key in the table.
-__attribute__((target("lzcnt")))
+__attribute__((target("bmi")))
 std::string HashTable::Find(std::string key) {
     uint64_t hash = absl::Hash<std::string>{}(key);
     size_t start = H1(hash);
     int8_t target_ctrl_byte = H2(hash);
+    std::cout << "target_ctrl_byte: " << target_ctrl_byte << std::endl;
     bool sentinel_empty_found = false;
 
+    int iteration = 0;
+
     while (sentinel_empty_found == false) {
+        std::cout << "iteration: " << ++iteration << "\n";
         // Check if group has a empty or sentinel bit.
         ctrl_t* start_index = &ctrl[start];
+
+        while (start < capacity) {
+            std::cout << ctrl[start] << std::endl;
+            start++;
+        }
+
         uint16_t empty_sentinel_bitmask = MatchEmpty(start_index);
         
         // Find the leftmost sentinel / empty set bit (this is our signal to stop searching).
-        uint16_t index = __lzcnt16(empty_sentinel_bitmask);
+        uint16_t index = __tzcnt_u16(empty_sentinel_bitmask);
 
         if (index == 16) { // No sentinels or empties found.
             index = -1;
         } else {
             sentinel_empty_found = true;
+            LogBitmask(empty_sentinel_bitmask);
             std::cout << "Found sentinel / empty" << "\n";
         }
 
         uint16_t targets_bitmask = Match(start_index, target_ctrl_byte);
+        std::cout << "match_bit bitmask: ";
+        LogBitmask(targets_bitmask);
     
         // BMI1 x86-64 instruction
-        // __lzcnt16(): Counts zeros from msb up until the occurance of the first set bit.
+        // _tzcnt_u16(): Counts zeros from lsb up until the occurance of the first set bit.
         // Finds the index of: 0010001000000000
-        //                       ^
-        uint16_t match_bit = __lzcnt16(targets_bitmask); 
+        //                           ^
+        
+        uint16_t match_bit = __tzcnt_u16(targets_bitmask); 
+        std::cout << "match_bit: " << match_bit << "\n";
     
         while (match_bit < 16) {
             // Check slot at index. Remember. Slots is the actual array of Key Value pairs.
-            // TODO: it might need to be start_index + match_bit
+            // TODO: start here. Need to determine why key is not being found.
+            LogSlots();
+            std::cout << "slots[match_bit + start].first: " << slots[match_bit + start].first << "\n";
             if (slots[match_bit + start].first == key) {
                 return slots[match_bit].second;
             }
 
-            // Flip the bit. e.g. 0010001000000000 -> 0000001000000000
-            //                      ^                   ^
-            // TODO: consider determining a quicker alternitive to flipping that bit than pow().
-            targets_bitmask ^= (uint16_t)pow(2, (15 - match_bit));
+            // Flip the least significant set bit. e.g. 0010001000000000 -> 0010000000000000
+            //                                                ^                   ^
+            targets_bitmask &= (targets_bitmask - 1);
 
-            // Find the next match_bit index. e.g. 0000000100000000 0000001000000000
-            //                                       ^                    ^
-            match_bit = __lzcnt16(targets_bitmask) - 16;
+            // Find the next match_bit index.      e.g. 0010000000000000 -> 0010000000000000
+            //                                                ^               ^
+            match_bit = __tzcnt_u16(targets_bitmask);
         }
 
         // Increment start to the next group.
@@ -154,4 +170,20 @@ uint16_t HashTable::MatchEmpty(ctrl_t* start) {
 
     return res;
 }
+
+// NOTE: <<=== Debug Helpers ===>>
+void HashTable::LogBitmask(uint16_t bitmask) {
+    std::bitset<16> bits(bitmask);
+    std::cout << "Bitmask: " << bits << std::endl;
+}
+
+void HashTable::LogSlots() {
+    std::cout << "Slots: " << "\n";
+    for (size_t i = 0; i < capacity; ++i) {
+        std::cout << "slot " << i << "\n";
+        std::cout << "(key: `" << slots[i].first << "` value: `" << slots[i].second << "`)\n";
+    }
+    std::cout << "\n";
+}
+
 

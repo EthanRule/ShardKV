@@ -67,9 +67,10 @@ public:
     // Constructor defines default values for HashTable.
     HashTable() {
 
-        // Initialize the sentinel value at the end of the control byte array.
+        // Initialize control byte and slots array to empty values.
         for (size_t i {}; i < capacity; ++i) {
             ctrl[i] = kEmpty;
+            slots[i] = {"", ""};
         }
 
         ctrl[128] = kSentinel;
@@ -121,9 +122,11 @@ private:
      * Byte to match: 00111010.
      * 
      * Returns: 0000010000000001.
+     *          ^ (index 31)   ^ (index 16)
      * 
-     * This bitmask indicates that in ctrl[] at indices 21 and 31, both indices are equal to
-     * the metadata byte we provided Match(). Afterwards we only need to check 21 and 31.
+     * Carefully notice indices start from the LSB in this bitmask.
+     * This bitmask indicates that in ctrl[] at indices 16 and 26, both indices are equal to
+     * the metadata byte we provided Match(). Afterwards we only need to check 21 and 31. 
     */ 
     uint16_t Match(ctrl_t* start, ctrl_t byte);
 
@@ -140,7 +143,13 @@ private:
 
 
 
-    // NOTE: <<=== General() Function Helpers ===>>
+    // NOTE: <<=== General Function Helpers ===>>
+
+
+    // NOTE: <<=== Debug Helpers ===>>
+    void LogBitmask(uint16_t bitmask);
+
+    void LogSlots();
 };
 
 #endif // HASH_TABLE_H_

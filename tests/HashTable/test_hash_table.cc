@@ -70,3 +70,13 @@ TEST(HashTableTest, InsertTableCapacityKeys_AllUniqueKeysExist) {
     EXPECT_EQ(keys.size(), 0);
 }
 
+// Test find 1 key value pair.
+TEST(HashTableTest, FindKey) {
+    HashTable table;
+    std::string key = "key";
+    std::string value = "value";
+
+    table.Insert(key, value);
+
+    EXPECT_EQ(table.Find(key), value);
+}
