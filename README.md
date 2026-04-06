@@ -6,13 +6,13 @@ Modern C++ 23 Sharded KV Store for 64-bit systems.
 OS: ```Linux (WSL)```  
 Ready: ```sudo apt update```  
 Compiler: ```sudo apt install clang```  
-Essential Build Tools: ```sudo apt install build-essential```
+Essential Build Tools: ```sudo apt install build-essential```  
 Build Tool: ```sudo apt install cmake```  
-Enable Build Script: ```chmod +x rebuild_run.sh && chmod +x rebuild_test```
-Abseil Hash Libs: ```cd src && git clone https://github.com/abseil/abseil-cpp.git```
+Enable Build Script: ```chmod +x rebuild_run.sh && chmod +x rebuild_test```  
+Abseil Hash Libs: ```cd src && git clone https://github.com/abseil/abseil-cpp.git```  
 
 #### Rebuild & Run
-```./rebuild_run.sh```
+```./rebuild_run.sh```  
   
 #### Resources
 The resources listed here act as breadcrumb trail for better understanding the the code.   
