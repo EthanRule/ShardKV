@@ -20,10 +20,16 @@ The resources listed here act as breadcrumb trail for better understanding the t
 - https://google.github.io/googletest/primer.html  
 - https://abseil.io/about/design/swisstables  
 - https://en.wikipedia.org/wiki/Quadratic_probing
--
+- 
 
 #### Inspirations
 
 - https://abseil.io/about/design/swisstables  
 - https://github.com/redis/redis  
 -
+
+#### Additional Resources
+- https://embeddedartistry.com/blog/2017/05/05/header-guards/
+- https://refactoring.guru/design-patterns/observer/cpp/example
+- https://www.geeksforgeeks.org/c/tcp-server-client-implementation-in-c/
+- https://severalnines.com/blog/hash-slot-vs-consistent-hashing-redis/
