@@ -49,16 +49,11 @@ void HashTable::Insert(std::string key, std::string value) {
 }
 
 // Finds the key in the table.
-// 
-//
 __attribute__((target("lzcnt")))
 std::string HashTable::Find(std::string key) {
     uint64_t hash = absl::Hash<std::string>{}(key);
     size_t start = H1(hash);
     int8_t target_ctrl_byte = H2(hash);
-
-    std::cout << "group from H1: " << start << "\n";
-    std::cout << "target_ctrl_byte H2: " << target_ctrl_byte << "\n";
     bool sentinel_empty_found = false;
 
     while (sentinel_empty_found == false) {
@@ -73,41 +68,39 @@ std::string HashTable::Find(std::string key) {
             index = -1;
         } else {
             sentinel_empty_found = true;
+            std::cout << "Found sentinel / empty" << "\n";
         }
 
         uint16_t targets_bitmask = Match(start_index, target_ctrl_byte);
     
         // BMI1 x86-64 instruction
-        // Purpose: Counts zeros from up until the occurance of the first set bit.
-        uint16_t match_bit = __lzcnt16(targets_bitmask) - 16; 
+        // __lzcnt16(): Counts zeros from msb up until the occurance of the first set bit.
+        // Finds the index of: 0010001000000000
+        //                       ^
+        uint16_t match_bit = __lzcnt16(targets_bitmask); 
     
         while (match_bit < 16) {
-            // Check slot at index. // check if it equals the same hash or key? I think key.
-            if (slots[match_bit].first == key) {
+            // Check slot at index. Remember. Slots is the actual array of Key Value pairs.
+            // TODO: it might need to be start_index + match_bit
+            if (slots[match_bit + start].first == key) {
                 return slots[match_bit].second;
             }
 
-            /*
-            * Brian Kernighan's Algorithm
-            * Purpose: Flip the right most bit of a number n. are we sure we want to even do this?
-            * Source: https://medium.com/@wizzywooz/brian-kernighans-algorithm-c65d796a7112
-            *                          bin        dec
-            *          n               00001000   8
-            *          n + 1           00000111   7
-            * // NOTE: n & (n - 1)     00000100   4
-            */
+            // Flip the bit. e.g. 0010001000000000 -> 0000001000000000
+            //                      ^                   ^
+            // TODO: consider determining a quicker alternitive to flipping that bit than pow().
+            targets_bitmask ^= (uint16_t)pow(2, (15 - match_bit));
 
-            
-            
-            targets_bitmask &= targets_bitmask - 1;
-            
+            // Find the next match_bit index. e.g. 0000000100000000 0000001000000000
+            //                                       ^                    ^
             match_bit = __lzcnt16(targets_bitmask) - 16;
         }
+
+        // Increment start to the next group.
+        start += 16;
     }
 
-    
-
-    return "";
+    throw std::runtime_error("HashTable: key : `" + key + "` does not exist.");
 }
 
 
