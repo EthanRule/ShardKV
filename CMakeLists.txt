@@ -46,7 +46,13 @@ add_executable(ShardKV_tests
     ${COMMON_SOURCES}
 )
 
+
+# TODO: -Wall -Wextra -Werror
+# TODO: Determine why `-mlzcnt` and `-march=native` don't enable `__lzcnt16()`.
+target_compile_options(ShardKV_tests PRIVATE -mlzcnt -march=native)
+
 target_link_libraries(${PROJECT_NAME} PRIVATE absl::hash)
+
 target_link_libraries(ShardKV_tests PRIVATE gtest_main absl::hash)
 gtest_discover_tests(ShardKV_tests)
 
@@ -56,3 +62,4 @@ add_executable(hashtable_dev
     src/server/HashTable/hash_table.cc
 )
 target_link_libraries(hashtable_dev PRIVATE absl::hash)
+

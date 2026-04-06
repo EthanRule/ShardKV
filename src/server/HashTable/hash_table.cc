@@ -50,6 +50,8 @@ void HashTable::Insert(std::string key, std::string value) {
 
 // Finds the key in the table.
 // 
+//
+__attribute__((target("lzcnt")))
 std::string HashTable::Find(std::string key) {
     uint64_t hash = absl::Hash<std::string>{}(key);
     size_t start = H1(hash);
@@ -73,7 +75,7 @@ std::string HashTable::Find(std::string key) {
             sentinel_empty_found = true;
         }
 
-        uint16_t mask = Match(start_index, target_ctrl_byte);
+        uint16_t targets_bitmask = Match(start_index, target_ctrl_byte);
     
         // BMI1 x86-64 instruction
         // Purpose: Counts zeros from up until the occurance of the first set bit.
@@ -81,8 +83,8 @@ std::string HashTable::Find(std::string key) {
     
         while (match_bit < 16) {
             // Check slot at index. // check if it equals the same hash or key? I think key.
-            if (slot[match_bit].first == key) {
-                return slot[match_bit].second;
+            if (slots[match_bit].first == key) {
+                return slots[match_bit].second;
             }
 
             /*
@@ -97,13 +99,11 @@ std::string HashTable::Find(std::string key) {
 
             
             
-            mask &= mask - 1;
+            targets_bitmask &= targets_bitmask - 1;
             
-            match_bit = __lzcnt16(mask) - 16;
+            match_bit = __lzcnt16(targets_bitmask) - 16;
         }
-    
-
-    //}
+    }
 
     
 
@@ -127,13 +127,13 @@ int8_t HashTable::H2(uint64_t hash) {
 }
 
 // NOTE: Checks 16 control bytes to see if any match to "byte". This filters down to where the hash could be.
-uint16_t HashTable::Match(size_t start, ctrl_t byte) {
+uint16_t HashTable::Match(ctrl_t* start, ctrl_t byte) {
     uint16_t res = 0;
 
     for (int i = 0; i < 16; ++i) {
         uint16_t mask = 0;
 
-        if (ctrl[start] == byte) {
+        if (*start == byte) {
             mask = (1U << i);
         }
 
