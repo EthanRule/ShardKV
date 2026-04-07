@@ -32,6 +32,7 @@
 #include "absl/hash/hash.h"
 #include <iostream>
 #include <bitset>
+#include <immintrin.h> // https://clang.llvm.org/doxygen/immintrin_8h.html
 
 // Type for control bytes.
 typedef int8_t ctrl_t;

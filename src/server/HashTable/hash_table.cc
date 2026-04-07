@@ -1,6 +1,4 @@
-// key range of (or 0 – 16383)
 #include "hash_table.h"
-#include <immintrin.h> // https://clang.llvm.org/doxygen/immintrin_8h.html
 
 void HashTable::ExecuteCommand(Command command) {
     switch (command.restAPI) {
@@ -8,7 +6,7 @@ void HashTable::ExecuteCommand(Command command) {
             Insert(command.key, command.value);
             break;
         case RestAPI::GET:
-            // auto res = GetItem(command.key);
+            // std::string res = Find(command.key);
             break;
         case RestAPI::DELETE:
             Delete(command.key);
@@ -39,8 +37,7 @@ void HashTable::Insert(std::string key, std::string value) {
         }
 
         if (inserted) break;
-        
-        std::cout << "Collision! jumping and trying again." << "\n";
+
         jump_size = (jumps * (jumps + 1)) / 2;
         jumps++;
         slot += 16 * jump_size;
@@ -55,26 +52,21 @@ std::string HashTable::Find(std::string key) {
     int8_t target_ctrl_byte = H2(hash);
     bool sentinel_empty_found = false;
 
-    int iteration = 0;
-
     while (sentinel_empty_found == false) {
         // Check if group has a empty or sentinel bit.
         ctrl_t* start_index = &ctrl[start];
-
         uint16_t empty_sentinel_bitmask = MatchEmpty(start_index);
         
-        // Find the leftmost sentinel / empty set bit (this is our signal to stop searching).
-        uint16_t index = __tzcnt_u16(empty_sentinel_bitmask);
+        // Find the least significant sentinel or empty set bit.
+        int32_t stop_index = __tzcnt_u16(empty_sentinel_bitmask);
 
-        if (index == 16) { // No sentinels or empties found.
-            index = -1;
+        if (stop_index == 16) { // No sentinels or empties found.
+            stop_index = -1;
         } else {
             sentinel_empty_found = true;
-            LogBitmask(empty_sentinel_bitmask);
         }
 
         uint16_t targets_bitmask = Match(start_index, target_ctrl_byte);
-        LogBitmask(targets_bitmask);
     
         // BMI1 x86-64 instruction
         // _tzcnt_u16(): Counts zeros from lsb up until the occurance of the first set bit.
@@ -82,9 +74,9 @@ std::string HashTable::Find(std::string key) {
         //                           ^
         uint16_t match_bit = __tzcnt_u16(targets_bitmask); 
         
-        while (match_bit < 16) {
-            // Check slot at index. Remember. Slots is the actual array of Key Value pairs.
-            // TODO: start here. Need to determine why key is not being found.
+        // Don't go past 15 and dont look at match_bits past a `kSentinel` or `kEmpty`.
+        while (match_bit < 16 && !(stop_index >= 0 && match_bit > stop_index)) {
+            // Check slot at index. Remember, `slots` is the actual array of key value pairs.
             if (slots[match_bit + start].first == key) {
                 return slots[match_bit + start].second;
             }
