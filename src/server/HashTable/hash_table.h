@@ -25,11 +25,11 @@
 #ifndef HASH_TABLE_H_
 #define HASH_TABLE_H_
 
+#include "../../Types/command.h"
+#include "absl/hash/hash.h"
 #include <string>
 #include <array>
 #include <stdint.h>
-#include "../../Types/command.h"
-#include "absl/hash/hash.h"
 #include <iostream>
 #include <bitset>
 #include <immintrin.h> // https://clang.llvm.org/doxygen/immintrin_8h.html
@@ -100,7 +100,7 @@ public:
 
     // Returns the growth left / capcity excluding the sentinel.
     const double GetLoadFactor() const {
-        return growth_left / (capacity - 1);
+        return (growth_left - capacity + 1) / (capacity - 1);
     }
 
 private:
@@ -150,6 +150,7 @@ private:
     // NOTE: <<=== Debug Helpers ===>>
     void LogBitmask(uint16_t bitmask);
 
+public:
     void LogSlots();
 };
 

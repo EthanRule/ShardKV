@@ -32,6 +32,7 @@ void HashTable::Insert(std::string key, std::string value) {
                 ctrl[i] = ctrl_byte;
                 slots[i] = {key, value};
                 inserted = true;
+                growth_left--;
                 break;
             }
         }

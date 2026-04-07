@@ -14,8 +14,6 @@ TEST(HashTableTest, InsertKey) {
     std::string value = "value";
 
     table.Insert(key, value);
-    
-    // EXPECT_EQ(table.Find<std::string>("key"), "value");
 }
 
 // Test inserting 5 key value pairs.
@@ -27,21 +25,21 @@ TEST(HashTableTest, InsertMultipleKeys) {
     for (size_t i {}; i < keys.size(); ++i) {
         table.Insert(keys[i].first, keys[i].second);
     }
-
-    // EXPECT_EQ(table.Find<std::string>("key"), "value");
 }
 
 // Test inserting capacity (max slots in table) keys fill the entire table.
 TEST(HashTableTest, InsertTableCapacityKeys_FullLoadFactor) {
     HashTable table;
     std::unordered_set<std::string> keys;
-    for (size_t i {}; i < keys.size(); ++i) {
-        keys.insert({"key" + i});
+    for (size_t i = 1; i < table.GetCapacity(); ++i) {
+        keys.insert({"key" + std::to_string(i)});
     }
 
     for (auto key : keys) {
         table.Insert(key, "val");
     }
+
+    table.LogSlots();
 
     // Check if the table is full using it's load factor.
     EXPECT_EQ(table.GetLoadFactor(), 1.0f);
@@ -52,7 +50,7 @@ TEST(HashTableTest, InsertTableCapacityKeys_FullLoadFactor) {
 TEST(HashTableTest, InsertTableCapacityKeys_AllUniqueKeysExist) {
     HashTable table;
     std::unordered_set<std::string> keys;
-    for (size_t i {}; i < keys.size(); ++i) {
+    for (size_t i = 1; i < table.GetCapacity(); ++i) {
         keys.insert({"key" + i});
     }
 
@@ -80,3 +78,21 @@ TEST(HashTableTest, FindKey) {
 
     EXPECT_EQ(table.Find(key), value);
 }
+
+// Test find multiple pair.
+TEST(HashTableTest, FindMultiplePairs) {
+    HashTable table;
+    std::array<std::pair<std::string, std::string>, 5> keys {{
+    {"key1", "val1"}, {"key2", "val2"}, {"key3", "val3"}, {"key4", "val4"}, {"key5", "val5"}}};
+
+    for (size_t i {}; i < keys.size(); ++i) {
+        table.Insert(keys[i].first, keys[i].second);
+    }
+
+    EXPECT_EQ(table.Find("key1"), "val1");
+    EXPECT_EQ(table.Find("key2"), "val2");
+    EXPECT_EQ(table.Find("key3"), "val3");
+    EXPECT_EQ(table.Find("key4"), "val4");
+    EXPECT_EQ(table.Find("key5"), "val5");
+}
+
