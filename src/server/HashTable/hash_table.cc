@@ -64,11 +64,6 @@ std::string HashTable::Find(std::string key) {
         // Check if group has a empty or sentinel bit.
         ctrl_t* start_index = &ctrl[start];
 
-        while (start < capacity) {
-            std::cout << ctrl[start] << std::endl;
-            start++;
-        }
-
         uint16_t empty_sentinel_bitmask = MatchEmpty(start_index);
         
         // Find the leftmost sentinel / empty set bit (this is our signal to stop searching).
@@ -85,6 +80,7 @@ std::string HashTable::Find(std::string key) {
         uint16_t targets_bitmask = Match(start_index, target_ctrl_byte);
         std::cout << "match_bit bitmask: ";
         LogBitmask(targets_bitmask);
+        std::cout << "houashduioashuiodashuiodhasuisdhuiodhuiashdere" << "\n";
     
         // BMI1 x86-64 instruction
         // _tzcnt_u16(): Counts zeros from lsb up until the occurance of the first set bit.
@@ -93,14 +89,14 @@ std::string HashTable::Find(std::string key) {
         
         uint16_t match_bit = __tzcnt_u16(targets_bitmask); 
         std::cout << "match_bit: " << match_bit << "\n";
-    
+        
         while (match_bit < 16) {
             // Check slot at index. Remember. Slots is the actual array of Key Value pairs.
             // TODO: start here. Need to determine why key is not being found.
             LogSlots();
             std::cout << "slots[match_bit + start].first: " << slots[match_bit + start].first << "\n";
             if (slots[match_bit + start].first == key) {
-                return slots[match_bit].second;
+                return slots[match_bit + start].second;
             }
 
             // Flip the least significant set bit. e.g. 0010001000000000 -> 0010000000000000
@@ -183,7 +179,6 @@ void HashTable::LogSlots() {
         std::cout << "slot " << i << "\n";
         std::cout << "(key: `" << slots[i].first << "` value: `" << slots[i].second << "`)\n";
     }
-    std::cout << "\n";
 }
 
 
