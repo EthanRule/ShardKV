@@ -31,7 +31,6 @@ void HashTable::Insert(std::string key, std::string value) {
         bool inserted = false;
         for (size_t i = slot; i < slot + 16; ++i) {
             if (ctrl[i] == kEmpty) {
-                std::cout << "Inserting at: " << i << "\n";
                 ctrl[i] = ctrl_byte;
                 slots[i] = {key, value};
                 inserted = true;
@@ -54,13 +53,11 @@ std::string HashTable::Find(std::string key) {
     uint64_t hash = absl::Hash<std::string>{}(key);
     size_t start = H1(hash);
     int8_t target_ctrl_byte = H2(hash);
-    std::cout << "target_ctrl_byte: " << target_ctrl_byte << std::endl;
     bool sentinel_empty_found = false;
 
     int iteration = 0;
 
     while (sentinel_empty_found == false) {
-        std::cout << "iteration: " << ++iteration << "\n";
         // Check if group has a empty or sentinel bit.
         ctrl_t* start_index = &ctrl[start];
 
@@ -74,27 +71,20 @@ std::string HashTable::Find(std::string key) {
         } else {
             sentinel_empty_found = true;
             LogBitmask(empty_sentinel_bitmask);
-            std::cout << "Found sentinel / empty" << "\n";
         }
 
         uint16_t targets_bitmask = Match(start_index, target_ctrl_byte);
-        std::cout << "match_bit bitmask: ";
         LogBitmask(targets_bitmask);
-        std::cout << "houashduioashuiodashuiodhasuisdhuiodhuiashdere" << "\n";
     
         // BMI1 x86-64 instruction
         // _tzcnt_u16(): Counts zeros from lsb up until the occurance of the first set bit.
         // Finds the index of: 0010001000000000
         //                           ^
-        
         uint16_t match_bit = __tzcnt_u16(targets_bitmask); 
-        std::cout << "match_bit: " << match_bit << "\n";
         
         while (match_bit < 16) {
             // Check slot at index. Remember. Slots is the actual array of Key Value pairs.
             // TODO: start here. Need to determine why key is not being found.
-            LogSlots();
-            std::cout << "slots[match_bit + start].first: " << slots[match_bit + start].first << "\n";
             if (slots[match_bit + start].first == key) {
                 return slots[match_bit + start].second;
             }
