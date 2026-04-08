@@ -14,34 +14,108 @@ void HashTable::ExecuteCommand(Command command) {
     }
 }
 
-// Triangularly increasing linear probing insert.
+/* 
+The `Insert()` function utilizes a Triangularly increasing probing. This ensures
+that every group in the table gets visited eventually.
+
+* Why not Quadratic or Linear probing?
+Quadratic probing does not guarentee every group is visited.
+Linear probing risks frequent O(n) probing of every group.
+
+Trangular probing can be explained as follows:
+
+    Jump Size = n * (n + 1) / 2.
+
+    With the Jump Size increase between every probe, a low-load-factor table finds 
+    new `kEmpty` fields quicker, and in the worst case on a table where the 
+    capacity is a power 2^n it will wrap around and visit all groups.
+
+In this example we are starting from group 1 (0-15), though in the code the H1 hash could start 
+us off at in the middle of a random group between 0 and capcity - 1.
+
+Starting from `n == 1`, we probe the start group for an `kEmpty` slot.
+If no `kEmpty` slot is found, `n` (or `jumps`) += 1.
+
+Visited Groups: *
+Current Group: ^
+
+                  groups                                `n`       `Jump Size`
+-----------------------------------------------------------------------------
+ *
+0-15 16-31 32-47 48-63 64-79 80-95 96-111 112-127        1             1
+ ^
+-----------------------------------------------------------------------------
+ *           *
+0-15 16-31 32-47 48-63 64-79 80-95 96-111 112-127        2             3
+             ^ 
+-----------------------------------------------------------------------------
+ *           *                 * 
+0-15 16-31 32-47 48-63 64-79 80-95 96-111 112-127        3             6
+                               ^ 
+-----------------------------------------------------------------------------
+ *     *     *                 *
+0-15 16-31 32-47 48-63 64-79 80-95 96-111 112-127        4             10
+       ^ 
+-----------------------------------------------------------------------------
+ *     *     *                 *     *
+0-15 16-31 32-47 48-63 64-79 80-95 96-111 112-127        5             15
+                                     ^ 
+-----------------------------------------------------------------------------
+ *     *     *           *     *     *
+0-15 16-31 32-47 48-63 64-79 80-95 96-111 112-127        6             21
+                         ^ 
+-----------------------------------------------------------------------------
+ *     *     *     *     *     *     *
+0-15 16-31 32-47 48-63 64-79 80-95 96-111 112-127        7             28
+                   ^
+-----------------------------------------------------------------------------
+ *     *     *     *     *     *     *       *
+0-15 16-31 32-47 48-63 64-79 80-95 96-111 112-127        15            120
+                   *
+
+Source: https://en.wikipedia.org/wiki/Triangular_number
+*/
+
 void HashTable::Insert(std::string key, std::string value) {
     uint64_t hashValue = absl::Hash<std::string>{}(key);
     size_t slot = H1(hashValue);
     int8_t ctrl_byte = H2(hashValue);
+    size_t jumps = 2;
+    bool inserted = false;
 
-    // Search the 16 ctrl bytes starting at `slot` to find an empty, then 
-    // probe subsaquent groups with triangularly increasing jumps: https://en.wikipedia.org/wiki/Triangular_number
-    size_t jumps = 1;
-    size_t jump_size = 1;
-
+    std::cout << "Starting at slot: " << slot << std::endl;
     while(slot < capacity) {
-        bool inserted = false;
         for (size_t i = slot; i < slot + 16; ++i) {
             if (ctrl[i] == kEmpty) {
-                ctrl[i] = ctrl_byte;
-                slots[i] = {key, value};
+                std::cout << "key inserted at: " << i << std::endl;
+
+                // Check if its a wraparound kWidth clone.
+                if (i > capacity) {
+                    std::cout << "Wrapped " << i << " around to: " << i - capacity - 1 << std::endl;
+                    ctrl[i - capacity - 1] = ctrl_byte;
+                    slots[i - capacity - 1] = {key, value};
+                    slot
+                } else {
+                    ctrl[i] = ctrl_byte;
+                    slots[i] = {key, value};
+                }
+
                 inserted = true;
                 growth_left--;
+                std::cout << "New growth left: " << growth_left << std::endl;
                 break;
             }
         }
 
         if (inserted) break;
 
-        jump_size = (jumps * (jumps + 1)) / 2;
+        size_t jump_size = (jumps * (jumps + 1)) / 2;
         jumps++;
         slot += 16 * jump_size;
+    }
+    
+    if (!inserted) {
+        std::cout << "(ERROR) NEVER Inserted. Ending at slot : " << slot << std::endl;
     }
 }
 

@@ -100,7 +100,7 @@ public:
 
     // Returns the growth left / capcity excluding the sentinel.
     const double GetLoadFactor() const {
-        return (growth_left - capacity + 1) / (capacity - 1);
+        return ((double)capacity - (double)growth_left - 1.0f) / ((double)capacity - 1.0f);
     }
 
 private:
