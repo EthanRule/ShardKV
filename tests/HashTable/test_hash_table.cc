@@ -2,7 +2,6 @@
 
 #include "gtest/gtest.h"
 #include <string>
-#include <vector>
 #include <array>
 #include <unordered_set>
 #include "../../src/server/HashTable/hash_table.h"
@@ -39,11 +38,30 @@ TEST(HashTableTest, InsertTableCapacityKeys_FullLoadFactor) {
         table.Insert(key, "val");
     }
 
-    table.LogSlots();
-
     // Check if the table is full using it's load factor.
     EXPECT_EQ(table.GetLoadFactor(), 1.0f);
 
+}
+
+// Test inserting capacity + 1 for a runtime error.
+TEST(HashTableTest, InsertTableCapacityPlusOneKeys) {
+    HashTable table;
+    std::unordered_set<std::string> keys;
+    for (size_t i = 1; i < table.GetCapacity() + 1; ++i) {
+        keys.insert({"key" + std::to_string(i)});
+    }
+
+    size_t i = 0;
+    for (auto it = keys.begin(); it != keys.end() && i < table.GetCapacity() + 1; ++it, ++i) {
+        if (i == table.GetCapacity()) {
+            std::cout << "here1" << std::endl;
+            EXPECT_THROW(table.Insert(*it, "val"), std::runtime_error);
+            break;
+        }
+
+        std::cout << "here2" << std::endl;
+        table.Insert(*it, "val");
+    }
 }
 
 // Test inserting capacity (max slots in table) keys are all found unique.
@@ -51,7 +69,7 @@ TEST(HashTableTest, InsertTableCapacityKeys_AllUniqueKeysExist) {
     HashTable table;
     std::unordered_set<std::string> keys;
     for (size_t i = 1; i < table.GetCapacity(); ++i) {
-        keys.insert({"key" + i});
+        keys.insert({"key" + std::to_string(i)});
     }
 
     for (auto key : keys) {

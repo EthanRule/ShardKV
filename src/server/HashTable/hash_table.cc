@@ -78,21 +78,19 @@ Source: https://en.wikipedia.org/wiki/Triangular_number
 
 void HashTable::Insert(std::string key, std::string value) {
     uint64_t hashValue = absl::Hash<std::string>{}(key);
-    size_t slot = H1(hashValue);
+    size_t slot = H1(hashValue); // need to log the table before hand, the intitial slot, then the jumps and see why its not inserting at the correct position.
     int8_t ctrl_byte = H2(hashValue);
 
     bool inserted = false;
-    size_t max_jumps = capacity - 2;
+    size_t max_jumps = capacity - 1;
     size_t jumps = 0;
 
     while(jumps < max_jumps) {
         for (size_t i = slot; i < slot + 16; ++i) {
             if (ctrl[i] == kEmpty) {
-                std::cout << "key inserted at: " << i << std::endl;
 
                 // Check if its a clone.
                 if (i > capacity) {
-                    std::cout << "Wrapped " << i << " around to: " << i - capacity - 1 << std::endl;
                     ctrl[i - capacity - 1] = ctrl_byte;
                     slots[i - capacity - 1] = {key, value};
                 } else {
@@ -102,7 +100,6 @@ void HashTable::Insert(std::string key, std::string value) {
 
                 inserted = true;
                 growth_left--;
-                std::cout << "New growth left: " << growth_left << std::endl;
                 break;
             }
         }
@@ -111,22 +108,19 @@ void HashTable::Insert(std::string key, std::string value) {
 
         jumps++;
         size_t jump_size = (jumps * (jumps + 1)) / 2;
-        std::cout << "jump size: " << jump_size << std::endl;
-        
         slot += (16 * jump_size);
         if (slot > capacity) { // If we are in the clones group, wrap around.
             //
-            std::cout << "slot is greater than capacity: " << slot << std::endl;
             slot %= capacity;
         }
-
-        std::cout << "new slot: " << slot << std::endl;
     }
 
     if (!inserted && GetLoadFactor() == 1.0f) {
         throw std::runtime_error("Failed to insert. Table full.");
-    } else if (!inserted) {
-        throw std::runtime_error("Failed to insert. Table is not full.");
+    } else if (!inserted && GetLoadFactor() < 1.0f) {
+        throw std::runtime_error("Failed to insert. Table less than full.");
+    } else if (!inserted && GetLoadFactor() > 1.0f) {
+        throw std::runtime_error("Failed to insert. Table more than full.");
     }
 }
 
