@@ -82,7 +82,7 @@ void HashTable::Insert(std::string key, std::string value) {
     int8_t ctrl_byte = H2(hashValue);
 
     bool inserted = false;
-    size_t max_jumps = (capacity / 16);
+    size_t max_jumps = capacity - 2;
     size_t jumps = 0;
 
     while(jumps < max_jumps) {
@@ -115,12 +115,18 @@ void HashTable::Insert(std::string key, std::string value) {
         
         slot += (16 * jump_size);
         if (slot > capacity) { // If we are in the clones group, wrap around.
-            slot -= (capacity + 1);
+            //
+            std::cout << "slot is greater than capacity: " << slot << std::endl;
+            slot %= capacity;
         }
+
+        std::cout << "new slot: " << slot << std::endl;
     }
 
-    if (!inserted) {
-        std::cout << "(ERROR) NEVER Inserted. Ending at slot : " << slot << std::endl;
+    if (!inserted && GetLoadFactor() == 1.0f) {
+        throw std::runtime_error("Failed to insert. Table full.");
+    } else if (!inserted) {
+        throw std::runtime_error("Failed to insert. Table is not full.");
     }
 }
 
