@@ -54,12 +54,10 @@ TEST(HashTableTest, InsertTableCapacityPlusOneKeys) {
     size_t i = 0;
     for (auto it = keys.begin(); it != keys.end() && i < table.GetCapacity() + 1; ++it, ++i) {
         if (i == table.GetCapacity()) {
-            std::cout << "here1" << std::endl;
             EXPECT_THROW(table.Insert(*it, "val"), std::runtime_error);
             break;
         }
 
-        std::cout << "here2" << std::endl;
         table.Insert(*it, "val");
     }
 }

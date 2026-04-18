@@ -38,7 +38,7 @@ If no `kEmpty` slot is found, `n` (or `jumps`) += 1.
 
 Visited Groups: *
 Current Group: ^
-
+// is this even accurate? it seems to jump by n not by jump_size
                   groups                                `n`       `Jump Size`
 -----------------------------------------------------------------------------
  *
@@ -79,19 +79,25 @@ Source: https://en.wikipedia.org/wiki/Triangular_number
 void HashTable::Insert(std::string key, std::string value) {
     uint64_t hashValue = absl::Hash<std::string>{}(key);
     size_t slot = H1(hashValue); // need to log the table before hand, the intitial slot, then the jumps and see why its not inserting at the correct position.
+    size_t initial_slot = slot;
+    std::cout << "Initial slot: " << initial_slot << std::endl;
+    // LogSlots();
     int8_t ctrl_byte = H2(hashValue);
 
     bool inserted = false;
-    size_t max_jumps = capacity - 1;
+    size_t max_jumps = capacity / kWidth;
     size_t jumps = 0;
 
     while(jumps < max_jumps) {
+        //std::cout << "jumping: " << jumps << " times, and checking 16 slots from: " << slot << std::endl;
+        std::cout << "Group range: " << slot << " - " << slot + 15 << std::endl;
         for (size_t i = slot; i < slot + 16; ++i) {
             if (ctrl[i] == kEmpty) {
 
                 // Check if its a clone.
                 if (i > capacity) {
                     ctrl[i - capacity - 1] = ctrl_byte;
+                    ctrl[i] = ctrl_byte;
                     slots[i - capacity - 1] = {key, value};
                 } else {
                     ctrl[i] = ctrl_byte;
@@ -101,6 +107,8 @@ void HashTable::Insert(std::string key, std::string value) {
                 inserted = true;
                 growth_left--;
                 break;
+            } else {
+                //std::cout << "slot: " << i << " is not kEmpty: " << ctrl[i] << std::endl;
             }
         }
 
@@ -108,18 +116,24 @@ void HashTable::Insert(std::string key, std::string value) {
 
         jumps++;
         size_t jump_size = (jumps * (jumps + 1)) / 2;
+        //std::cout << "\nNew jump_size: " << jump_size << std::endl;
         slot += (16 * jump_size);
+        //std::cout << "New slot: " << slot << std::endl;
         if (slot > capacity) { // If we are in the clones group, wrap around.
             //
             slot %= capacity;
+            //std::cout << "slot after mod: " << slot << std::endl;
         }
     }
 
     if (!inserted && GetLoadFactor() == 1.0f) {
+        std::cout << "growth_left: " << growth_left << std::endl;
         throw std::runtime_error("Failed to insert. Table full.");
     } else if (!inserted && GetLoadFactor() < 1.0f) {
+        std::cout << "growth_left: " << growth_left << std::endl;
         throw std::runtime_error("Failed to insert. Table less than full.");
     } else if (!inserted && GetLoadFactor() > 1.0f) {
+        std::cout << "growth_left: " << growth_left << std::endl;
         throw std::runtime_error("Failed to insert. Table more than full.");
     }
 }
