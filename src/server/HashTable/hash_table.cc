@@ -38,7 +38,6 @@ If no `kEmpty` slot is found, `n` (or `jumps`) += 1.
 
 Visited Groups: *
 Current Group: ^
-// is this even accurate? it seems to jump by n not by jump_size
                   groups                                `n`       `Jump Size`
 -----------------------------------------------------------------------------
  *
@@ -86,6 +85,8 @@ void HashTable::Insert(std::string key, std::string value) {
 
     bool inserted = false;
     size_t max_jumps = capacity / kWidth;
+    std::cout << "max_jumps: " << max_jumps << std::endl;
+    assert((double)capacity / (double)kWidth == 8.0f); // TODO: Move this into a unit test that is more generic than 8.0f.
     size_t jumps = 0;
 
     while(jumps < max_jumps) {
@@ -114,6 +115,8 @@ void HashTable::Insert(std::string key, std::string value) {
 
         if (inserted) break;
 
+
+        //TODO: need to determine why we arent jumping cleanly into 8 seperate groups.
         jumps++;
         size_t jump_size = (jumps * (jumps + 1)) / 2;
         //std::cout << "\nNew jump_size: " << jump_size << std::endl;
@@ -256,5 +259,3 @@ void HashTable::LogSlots() {
         std::cout << "(key: `" << slots[i].first << "` value: `" << slots[i].second << "`)\n";
     }
 }
-
-
