@@ -79,19 +79,19 @@ void HashTable::Insert(std::string key, std::string value) {
     uint64_t hashValue = absl::Hash<std::string>{}(key);
     size_t slot = H1(hashValue); // need to log the table before hand, the intitial slot, then the jumps and see why its not inserting at the correct position.
     size_t initial_slot = slot;
-    std::cout << "Initial slot: " << initial_slot << std::endl;
+    //std::cout << "Initial slot: " << initial_slot << std::endl;
     // LogSlots();
     int8_t ctrl_byte = H2(hashValue);
 
     bool inserted = false;
     size_t max_jumps = capacity / kWidth;
-    std::cout << "max_jumps: " << max_jumps << std::endl;
+    //std::cout << "max_jumps: " << max_jumps << std::endl;
     assert((double)capacity / (double)kWidth == 8.0f); // TODO: Move this into a unit test that is more generic than 8.0f.
     size_t jumps = 0;
 
     while(jumps < max_jumps) {
         //std::cout << "jumping: " << jumps << " times, and checking 16 slots from: " << slot << std::endl;
-        std::cout << "Group range: " << slot << " - " << slot + 15 << std::endl;
+        //std::cout << "Group range: " << slot << " - " << slot + 15 << std::endl;
         for (size_t i = slot; i < slot + 16; ++i) {
             if (ctrl[i] == kEmpty) {
 
@@ -116,11 +116,11 @@ void HashTable::Insert(std::string key, std::string value) {
         if (inserted) break;
 
 
-        //TODO: need to determine why we arent jumping cleanly into 8 seperate groups.
+        //TODO: create a unit test that ensures we jump 8 or a generic distinct groups on a full table.
         jumps++;
         size_t jump_size = (jumps * (jumps + 1)) / 2;
-        //std::cout << "\nNew jump_size: " << jump_size << std::endl;
-        slot += (16 * jump_size);
+        // std::cout << "\njumps: " << jumps << "jump_size: " << jump_size << std::endl;
+        slot = initial_slot + (16 * jump_size);
         //std::cout << "New slot: " << slot << std::endl;
         if (slot > capacity) { // If we are in the clones group, wrap around.
             //
