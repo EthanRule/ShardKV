@@ -26,12 +26,11 @@ Abseil Hash Libs: ```cd src && git clone https://github.com/abseil/abseil-cpp.gi
     - https://en.wikipedia.org/wiki/Triangular_number
     - https://severalnines.com/blog/hash-slot-vs-consistent-hashing-redis/
     - https://abseil.io/about/design/swisstables  
-    - https://abseil.io/about/design/swisstables  
 - Design Patterns
     - https://refactoring.guru/design-patterns/observer/cpp/example
+- Testing
+    - https://google.github.io/googletest/primer.html  
 - C/C++, Rust
     - https://embeddedartistry.com/blog/2017/05/05/header-guards/
     - https://www.geeksforgeeks.org/c/tcp-server-client-implementation-in-c/
-- Testing
-    - https://google.github.io/googletest/primer.html  
 - 
